@@ -15,22 +15,22 @@ class GetDetails extends React.Component{
      }
     getdetails(){
         
-    fetch(`http://localhost:3000/get-list`)
-      .then(res => res.json())
-      .then(
-        (result) => {
-           // console.log("sdfsf",result)
-          this.setState({
-            items: result
+        fetch(`http://localhost:3000/api/posts`, {
+            method: 'POST',
+            headers:{
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            }
+        })
+        .then((response) =>response.json())
+        .then((responseJson) => {
+            console.log("get details____",responseJson.message.items);
+                      this.setState({
+            items: responseJson.message.items
           });
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      )
+            
+        })
+
     }
 componentDidMount() {
    this.getdetails()
@@ -41,9 +41,9 @@ componentDidMount() {
       console.log("sdf",items);
                       
     const data =items =this.state.items;
-    const listItems = data.map((d) => <li key={d.key}>{d.balance}</li>);
+    const listItems = data.map((d) => <li key={d.id}>{d.label}</li>);
     return(
-        <div className="d-flex justify-content-center bal-info">
+        <div className="">
         
             <ul className ="bal-detail">
 

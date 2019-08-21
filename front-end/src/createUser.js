@@ -3,31 +3,31 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
             
-class Login extends React.Component{
+class Createuser extends React.Component{
      constructor(props) {
         super(props);
          this.state = ({
             username:"",
-            password:""
+            password:"",
+             name:""
           });
-         this.login = this.login.bind(this);
+         this.createUser = this.createUser.bind(this);
          this.updateUI = this.updateUI.bind(this);
-         this.createAc =this.createAc.bind(this);
+         this.curaccount = this.curaccount.bind(this);
      }
-    login(e){
+    createUser(e){
         e.preventDefault();
         //hide form show loader
         var usname = this.state.username;
         var password = this.state.password;
+        var user = this.state.user;
         console.log("__",usname,password);
-//        if(usname.length  == 0 || password.length ==0){
-//            alert("please enter credential.");
-//            return;
-//        }
-        console.log("username", usname);
-        console.log("password", password);
-        var dataParams= {username:usname,password:password}
-        fetch(`http://localhost:3000/api/login`, {
+        if(usname.length  == 0 || password.length ==0 || user == 0 ){
+            alert("please enter credential.");
+            return;
+        }
+        var dataParams= {username:usname,password:password,user:user}
+        fetch(`http://localhost:3000/api/createUser`, {
             method: 'POST',
             headers:{
             'Accept': 'application/json',
@@ -40,17 +40,7 @@ class Login extends React.Component{
         .then((responseJson) => {
 //            console.log("login details",responseJson);
 ////            this.props.login(responseJson.status);
-            
-            if(responseJson.message == "Not found user"){
-                this.props.login("LogOut");
-            }else{
-            localStorage.removeItem('current_user');
-            console.log("stored in local");
-            var user = {name:"aaa",key:responseJson.token}
-            localStorage.setItem('current_user',responseJson.token);
-                this.props.login("LogedIn");
-            }
-//            this.props.login("LogedIn");
+            this.props.login("LogOut");
         })
     }
     updateUI(e){
@@ -60,11 +50,9 @@ class Login extends React.Component{
         })
         
     }
-    createAc(e){
-        const {id} = e.target;
-        this.props.login(id);
-    }
-  
+  curaccount(){
+      this.props.login("LogOut");
+  }
   render(){
     return(
         <div className="wrapper fadeInDown">
@@ -74,18 +62,20 @@ class Login extends React.Component{
             </div>
 
             <form>
+                <input type="text" id="name" defaultValue={this.state.name} onChange ={this.updateUI} autoComplete="off" className="fadeIn second" name="login" placeholder="Enter Name" />
+        
               <input type="text" id="username" defaultValue={this.state.username} onChange ={this.updateUI} autoComplete="off" className="fadeIn second" name="login" placeholder="Enter Username" />
         
               <input type="password" id="password" defaultValue={this.state.password} id="password" onChange ={this.updateUI}   autoComplete="off" className="fadeIn third" name="login" placeholder="Enter password" />
         
-              <input type="submit" className="fadeIn fourth" onClick={this.login} value="Log In" />
+              <input type="submit" className="fadeIn fourth" onClick={this.createUser} value="Log In" />
             </form>
             <div id="formFooter">
-              <a className="underlineHover" id="create" onClick={this.createAc} href="#">Dont have account ?</a>
+              <a className="underlineHover" onClick={this.curaccount} href="#">Already have an Account?</a>
             </div>
           </div>
         </div>
     )
   }
 }
-export default Login
+export default Createuser
